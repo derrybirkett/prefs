@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-17",
+  "philosophy": {
+    "methodology": "lean",
+    "approach": "iterative",
+    "values": [
+      "learning organizations",
+      "design thinking",
+      "continuous improvement",
+      "user-centered design"
+    ]
+  },
+  "techStack": {
+    "monorepo": {
+      "tool": "NX",
+      "required": true
+    },
+    "testing": {
+      "e2e": "playwright",
+      "required": true
+    },
+    "ui": {
+      "components": "shadcn",
+      "approach": "copy-into-project"
+    },
+    "versionControl": {
+      "system": "git",
+      "platform": "github",
+      "workflow": "branch-based"
+    }
+  },
+  "productSurfaces": {
+    "required": [
+      {
+        "name": "marketing",
+        "path": "/",
+        "auth": false,
+        "description": "Landing page"
+      },
+      {
+        "name": "auth",
+        "paths": ["/login", "/signup", "/reset-password"],
+        "auth": false,
+        "description": "Authentication flow"
+      },
+      {
+        "name": "dashboard",
+        "path": "/dashboard",
+        "auth": true,
+        "description": "Main authenticated experience",
+        "components": [
+          "user-profile-dropdown",
+          "navigation",
+          "logout-button"
+        ]
+      },
+      {
+        "name": "blog",
+        "path": "/blog",
+        "auth": false,
+        "description": "Content and updates"
+      },
+      {
+        "name": "docs",
+        "path": "/docs",
+        "auth": false,
+        "description": "Documentation site"
+      }
+    ]
+  },
+  "coreUserFlow": {
+    "steps": [
+      "landing-page",
+      "login",
+      "dashboard",
+      "logout"
+    ],
+    "validation": "end-to-end-test",
+    "priority": "critical"
+  },
+  "gitWorkflow": {
+    "branchStrategy": "feature-branch",
+    "mainBranch": "main",
+    "protectedBranches": ["main"],
+    "commitConvention": "conventional-commits",
+    "requirePR": true,
+    "requireReview": true,
+    "mergeStrategy": "squash"
+  },
+  "automation": {
+    "onCommit": {
+      "action": "update-activity-log",
+      "enabled": true
+    },
+    "onPush": {
+      "action": "update-changelog",
+      "enabled": true
+    },
+    "onRelease": {
+      "action": "create-blog-post",
+      "enabled": true
+    }
+  },
+  "developmentAgents": {
+    "stack": [
+      {
+        "name": "strategy",
+        "responsibility": "align with vision and goals"
+      },
+      {
+        "name": "design",
+        "responsibility": "user experience and interface"
+      },
+      {
+        "name": "implementation",
+        "responsibility": "write production code"
+      },
+      {
+        "name": "testing",
+        "responsibility": "quality and validation"
+      },
+      {
+        "name": "documentation",
+        "responsibility": "docs, changelogs, blogs"
+      },
+      {
+        "name": "devops",
+        "responsibility": "deployment and infrastructure"
+      }
+    ]
+  },
+  "sourceOfTruth": "git-repository",
+  "issueTracking": {
+    "platform": "github-issues",
+    "workflow": "new -> backlog -> in-progress -> review -> done"
+  }
+}
