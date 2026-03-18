@@ -13,7 +13,7 @@ This repository contains my preferences, methodologies, and conventions for buil
 ## Quick Reference
 
 **Philosophy**: Learning organizations, lean methodology, design thinking
-**Stack**: NX monorepos, Playwright, shadcn/ui
+**Stack**: NX monorepos (default), Playwright (default), shadcn/ui
 **Workflow**: Branch-based development with GitHub issues and PRs
 **Core Flow**: Landing page → Login → Dashboard → Logout
 
