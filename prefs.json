@@ -13,17 +13,21 @@
     ]
   },
   "techStack": {
+    "buildOrder": ["cli", "api", "ui"],
     "monorepo": {
       "tool": "NX",
-      "required": true
+      "default": true,
+      "overrideConditions": ["single small app", "different build system required", "team preference"]
     },
     "testing": {
       "e2e": "playwright",
-      "required": true
+      "default": true,
+      "overrideConditions": ["different testing approach required", "team preference"]
     },
     "ui": {
       "components": "shadcn",
-      "approach": "copy-into-project"
+      "approach": "copy-into-project",
+      "default": true
     },
     "versionControl": {
       "system": "git",
@@ -32,7 +36,7 @@
     }
   },
   "productSurfaces": {
-    "required": [
+    "default": [
       {
         "name": "marketing",
         "path": "/",
@@ -55,7 +59,9 @@
           "navigation",
           "logout-button"
         ]
-      },
+      }
+    ],
+    "optional": [
       {
         "name": "blog",
         "path": "/blog",
@@ -68,7 +74,8 @@
         "auth": false,
         "description": "Documentation site"
       }
-    ]
+    ],
+    "guidance": "Add blog/docs for products with ongoing content needs"
   },
   "coreUserFlow": {
     "steps": [

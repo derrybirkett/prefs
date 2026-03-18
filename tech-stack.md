@@ -3,10 +3,12 @@
 ## Repository Structure
 
 ### NX Monorepo
-- Use NX workspace for all projects
+- Default to NX workspace for projects with multiple related applications
 - Organize code into apps and libraries
 - Leverage NX caching and task orchestration
 - Share common code across applications
+
+**When to deviate**: Single-purpose applications, very small projects, or when the team has strong preference for a different build system.
 
 **Why NX**: Provides excellent tooling for managing multiple related applications, enforces architectural boundaries, and scales well as products grow.
 
@@ -50,6 +52,17 @@
 - Pull requests for all code changes
 - Code review required before merge
 - GitHub Actions for CI/CD automation
+
+## Build Order
+
+Default to: **CLI → API → UI**
+
+This approach:
+- Validates core logic and data models early
+- Creates a reusable API for all interfaces
+- UI becomes a consumer of the API rather than duplicating business logic
+
+**When to deviate**: Consumer apps, dashboards, or UI-first products.
 
 ## Development Tools
 
