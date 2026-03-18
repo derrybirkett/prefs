@@ -17,4 +17,11 @@ This repository contains my preferences, methodologies, and conventions for buil
 **Workflow**: Branch-based development with GitHub issues and PRs
 **Core Flow**: Landing page → Login → Dashboard → Logout
 
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `wrap up` | Commit all changes, tag with incremented version, push to remote, and end session |
+| `unwraprap` | Typo alias for wrap up |
+
 See individual files for detailed preferences.
