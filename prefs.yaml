@@ -50,6 +50,13 @@ commands:
 
 # Technology stack defaults
 techStack:
+  containerization:
+    tool: docker
+    default: true
+    purpose: model and run all applications
+    overrideConditions:
+      - platform constraints
+      - team preference
   buildOrder:
     - cli
     - api
