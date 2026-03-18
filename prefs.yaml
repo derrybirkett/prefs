@@ -13,6 +13,26 @@ philosophy:
     - design thinking
     - continuous improvement
     - user-centered design
+    - minimalism
+
+# Design principles
+design:
+  ethos: minimalism
+  colors:
+    primary: black
+    background: white
+    error: red
+    success: green
+    accents: none
+  principles:
+    - Remove all non-essential UI decorations
+    - Embrace white space
+    - Simplicity over complexity
+    - Function over form
+    - Content is king
+  typography:
+    style: clean
+    fontPairs: minimal
 
 # Commands (interpreted by IDE)
 commands:
