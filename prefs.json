@@ -142,5 +142,16 @@
   "issueTracking": {
     "platform": "github-issues",
     "workflow": "new -> backlog -> in-progress -> review -> done"
+  },
+  "commands": {
+    "wrap up": {
+      "description": "Commit all changes, tag with incremented version, push to remote, and end session",
+      "steps": ["git add -A", "git commit (prompt for message)", "git tag (increment patch)", "git push origin main --tags"],
+      "endsSession": true
+    },
+    "unwraprap": {
+      "description": "Typo alias for wrap up",
+      "aliasOf": "wrap up"
+    }
   }
 }
