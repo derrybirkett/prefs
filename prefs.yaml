@@ -16,6 +16,17 @@ philosophy:
     - minimalism
     - pruning
 
+# Spec-driven development
+developmentModel:
+  approach: spec-first
+  description: The spec is the source of truth - define what the app should be before and during development
+  principles:
+    - Write the spec before writing code
+    - Spec describes behavior, not implementation
+    - Update spec when requirements change
+    - Code must match spec, not the other way around
+    - Spec is living - maintained throughout development
+
 # Design principles
 design:
   ethos: minimalism
