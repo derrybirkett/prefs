@@ -131,16 +131,20 @@ gitWorkflow:
   mergeStrategy: squash
 
 # Automation triggers
+# Note: Changelog handled by GitHub release notes (auto-generated from conventional commits)
 automation:
   onCommit:
     action: update-activity-log
     enabled: true
+    description: Track development activity for team context
   onPush:
-    action: update-changelog
-    enabled: true
+    action: none
+    enabled: false
+    reason: GitHub release notes handle changelog automatically
   onRelease:
     action: create-blog-post
     enabled: true
+    description: Generate blog post from release notes
 
 # Source of truth for system state
 sourceOfTruth: git-repository

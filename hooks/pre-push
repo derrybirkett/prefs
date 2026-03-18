@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Pre-push hook: Block direct pushes to main
+
+protected="main"
+remote="$1"
+url="$2"
+
+while read local_ref local_sha remote_ref remote_sha; do
+  branch=$(echo "$remote_ref" | sed 's|refs/heads/||')
+  
+  if [ "$branch" = "$protected" ]; then
+    echo "❌ Pushing directly to '$protected' is not allowed."
+    echo "   Create a feature branch, make changes, and open a PR."
+    exit 1
+  fi
+done
+
+exit 0

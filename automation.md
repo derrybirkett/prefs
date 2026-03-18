@@ -2,6 +2,24 @@
 
 This document defines the automation that should be triggered at various stages of the development lifecycle.
 
+## Git Hooks
+
+### Pre-push Hook
+
+Prevents direct pushes to protected branches (main).
+
+**Location**: `hooks/pre-push`
+
+**Action**: Blocks push if targeting main directly. Forces feature branch workflow.
+
+**To install**: Copy to `.git/hooks/pre-push` and make executable:
+```bash
+cp hooks/pre-push .git/hooks/
+chmod +x .git/hooks/pre-push
+```
+
+---
+
 ## Git Hook Triggers
 
 ### On Commit
@@ -37,31 +55,12 @@ This document defines the automation that should be triggered at various stages 
 
 **Trigger**: After every `git push`
 
-**Action**: Update changelog
+**Action**: None - GitHub release notes auto-generate changelog from conventional commits.
 
-**Implementation**:
-- Use CI/CD pipeline or Git post-push hook
-- Update `CHANGELOG.md`
-- Group commits since last push
-- Categorize by type (feat, fix, docs, etc.)
-
-**Changelog Format**:
-```markdown
-## [Unreleased] - 2026-03-17
-
-### Added
-- User settings page
-- Profile avatar upload
-
-### Fixed
-- Login redirect issue
-- Dashboard loading state
-
-### Changed
-- Updated dashboard layout
-```
-
-**Purpose**: Maintain human-readable history of changes for team and users.
+**Why**: GitHub handles this automatically:
+- `feat:` → Features section
+- `fix:` → Bug Fixes section  
+- `docs:` → Documentation section
 
 ---
 
