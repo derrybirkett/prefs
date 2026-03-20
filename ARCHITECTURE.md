@@ -123,10 +123,21 @@ User: "I want an AI news site with subscriptions"
 
 **Why**: Don't repeat setup. Code once, use everywhere.
 
-**Important**: hatch is a separate, mature repo used as a **git submodule**. This allows:
-- Independent versioning and development
-- Easy updates via `git submodule update`
-- Clear ownership of code templates
+**Opinionated defaults**: Hatch has strong opinions about:
+- Frameworks (Next.js, NestJS)
+- Language (TypeScript)
+- Project structure
+- Testing setup
+- Docker configuration
+
+**User overrides**: Preferences in `.prefs/` take priority over Hatch's defaults.
+
+**Priority for scaffolding**:
+```
+1. .prefs/ preferences    ← wins if specified
+2. Hatch opinions         ← fills gaps, provides defaults
+3. System defaults        ← last resort
+```
 
 **Templates**:
 ```
@@ -143,7 +154,7 @@ hatch/                 # Submodule from github.com/derrybirkett/hatch
 └── ci/
 ```
 
-**Reads**: seed.config (preferences)
+**Reads**: .prefs/ preferences (overrides hatch defaults)
 **Writes**: apps/, libs/
 
 ---
@@ -244,6 +255,7 @@ git commit -m "chore: update submodules"
    → Passes .prefs/prefs.yaml preferences
    → hatch scaffolds apps/cli, apps/api, apps/ui
    → hatch applies design preferences (minimalism, colors...)
+   → hatch uses user preferences where specified, falls back to own opinions
    → hatch sets up docker, CI/CD
 
 7. Result: Project ready to develop
@@ -267,17 +279,29 @@ git commit -m "chore: update submodules"
 | What | Belongs To | Why |
 |------|-----------|-----|
 | Intent | User | It's their idea |
-| Preferences | .prefs/ (submodule) | Personal/team config |
+| Preferences | .prefs/ (submodule) | Personal/team config - overrides hatch |
 | Mission/Strategy | .pip/ (submodule) | Project governance |
-| Code Templates | hatch/ (submodule) | Executable scaffolding |
+| Code Templates | hatch/ (submodule) | Executable scaffolding - provides defaults |
 | Generated Code | Project repo | Per-project output |
+
+### Preference Override Rules
+
+**Hatch is opinionated but prefs wins**:
+
+| Setting | .prefs/ | Hatch | Result |
+|---------|---------|-------|--------|
+| UI library | shadcn | shadcn | shadcn (agrees) |
+| UI library | vue | shadcn | **User wins** |
+| TypeScript | not specified | required | Hatch's opinion |
+| Build order | cli→api→ui | not specified | User wins |
+| Package manager | pnpm | npm | **User wins** |
 
 ### What Each Tool Doesn't Do
 
 - **prefs**: Doesn't generate code or governance. Just preferences.
 - **pip**: Doesn't execute or scaffold. Pure information.
 - **seed**: Doesn't store preferences or templates. Just interprets.
-- **hatch**: Doesn't read intent. Just applies prefs to templates.
+- **hatch**: Provides defaults but respects user preferences when specified.
 
 ---
 
