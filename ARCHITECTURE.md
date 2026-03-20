@@ -1,4 +1,4 @@
-# Foundation Architecture
+# Bloom System Architecture
 
 **System for AI-assisted product development: from intent to deployed app.**
 
@@ -16,7 +16,7 @@ Building products involves multiple concerns:
 | **Code** | The actual implementation | Scaffolding, patterns |
 | **Deployment** | Getting it live | CI/CD, infrastructure |
 
-These are usually disconnected. Foundations connects them.
+These are usually disconnected. Bloom connects them.
 
 ---
 
@@ -48,7 +48,7 @@ techStack:
 design:
   ethos: minimalism
   colors: { primary: black, background: white }
-  
+   
 # How to work
 commands:
   wrap up: commit + tag + push + end session
@@ -64,41 +64,38 @@ productSurfaces:
 
 ---
 
-### 2. pip (Submodule)
+### 2. grove (Submodule)
 
-**What**: Agentic development runtime - autonomous agents build the product.
+**What**: Lightweight agentic development layer - autonomous agents build the product.
 
-**Why**: Agents need mission, roles, and patterns to work autonomously. pip is not just governance docs - it's the **runtime** where agents execute work.
+**Why**: Agents need mission, roles, and patterns to work autonomously. Grove is the simplified, pragmatic version focused on Product/UX/Dev instead of C-suite complexity.
 
 **Role in the flow**:
 ```
-Idea → Seed (bootstrap) → Hatch (scaffold) → pip (autonomous development)
+Idea → Seed (bootstrap) → Hatch (scaffold) → grove (autonomous development)
 ```
 
 **Key features**:
 - **Mission** - guides agents on what matters
-- **C-suite model** - assigns responsibilities to agents (CTO for code, COO for release hygiene, etc.)
+- **Product/UX/Dev model** - assigns responsibilities to agents (simpler than C-suite)
 - **Roadmap** - agents pick up work autonomously
-- **Patterns** - how agents collaborate (ReAct, Planning, Reflection)
+- **Patterns** - how agents collaborate
 - **Activity log** - track what agents did and why
 
-**Important**: pip is a separate repo used as a **git submodule**. This allows:
+**Important**: grove is a separate repo used as a **git submodule**. This allows:
 - Independent versioning and development
 - Easy updates via `git submodule update`
 - Agents get mission context at session start
 
 **Contents**:
 ```
-pip/                    # Submodule from github.com/derrybirkett/pip
+grove/                    # Submodule from github.com/derrybirkett/grove
 ├── mission/           # Why we exist
 │   └── mission.md    # Problem, solution, vision
-├── ia/               # Agent responsibilities
-│   ├── agent_manifest.yml
-│   └── agents/       # CEO, CTO, CPO, COO, etc.
-├── graph/            # Roadmap and work items
-│   └── product-app.md
-├── patterns/         # Agentic collaboration patterns
-└── docs/             # Activity log, processes
+├── agent-manifest.md # Product/UX/Dev responsibilities
+├── workflows/        # How work gets done
+├── patterns/         # Collaboration patterns
+└── docs/             # Activity log
 ```
 
 **Reads**: seed (when generating), agents (at session start)
@@ -118,8 +115,9 @@ User: "I want an AI news site with subscriptions"
          ↓
     seed init --story "..."
          ↓
-    ├──→ pip (generates mission, agents, graph)
-    └──→ hatch (applies .prefs/ preferences)
+    ├──→ grove (generates mission, agent manifest, workflows)
+    ├──→ prefs (adds as submodule)
+    └──→ hatch (applies preferences)
          ↓
     Project ready for autonomous development
 ```
@@ -128,10 +126,13 @@ User: "I want an AI news site with subscriptions"
 ```bash
 seed init --story "..." --vision "..." --metric "..."
 seed init --no-llm --story "..."   # Without LLM parsing
+seed init --prefs user/prefs       # Custom prefs repo
+seed init --no-grove               # Skip grove
+seed init --no-hatch               # Skip hatch
 ```
 
-**Reads**: .prefs/ (preferences)
-**Writes**: .pip/ (governance), apps/ (code)
+**Reads**: prefs (preferences)
+**Writes**: grove (governance), apps/ (code)
 
 ---
 
@@ -148,11 +149,11 @@ seed init --no-llm --story "..."   # Without LLM parsing
 - Testing setup
 - Docker configuration
 
-**User overrides**: Preferences in `.prefs/` take priority over Hatch's defaults.
+**User overrides**: Preferences in `prefs/` take priority over Hatch's defaults.
 
 **Priority for scaffolding**:
 ```
-1. .prefs/ preferences    ← wins if specified
+1. prefs/ preferences    ← wins if specified
 2. Hatch opinions         ← fills gaps, provides defaults
 3. System defaults        ← last resort
 ```
@@ -172,7 +173,7 @@ hatch/                 # Submodule from github.com/derrybirkett/hatch
 └── ci/
 ```
 
-**Reads**: .prefs/ preferences (overrides hatch defaults)
+**Reads**: prefs/ preferences (overrides hatch defaults)
 **Writes**: apps/, libs/
 
 ---
@@ -180,34 +181,35 @@ hatch/                 # Submodule from github.com/derrybirkett/hatch
 ## Integration
 
 ```
-                         ┌─────────────────────────────────────┐
-                         │             .prefs/                  │
-                         │  (SUBMODULE - your preferences)    │
-                         │                                     │
-                         │  github.com/derrybirkett/prefs       │
-                         │  or: github.com/you/your-prefs       │
-                         └──────────────┬──────────────────────┘
-                                        │
-                         ┌──────────────┴──────────────────────┐
-                         │                 seed                 │
-                         │   (agnostic tool - reads prefs)      │
-                         └──────────────┬──────────────────────┘
-                                        │
-         ┌───────────────────────────────┼───────────────────────────────┐
-         │                               │                               │
-         ▼                               ▼                               ▼
+                          ┌─────────────────────────────────────┐
+                          │             prefs/                   │
+                          │  (SUBMODULE - your preferences)    │
+                          │                                     │
+                          │  github.com/derrybirkett/prefs       │
+                          │  or: github.com/you/your-prefs       │
+                          └──────────────┬──────────────────────┘
+                                         │
+                          ┌──────────────┴──────────────────────┐
+                          │                 seed                 │
+                          │   (agnostic tool - reads prefs)     │
+                          └──────────────┬──────────────────────┘
+                                         │
+          ┌───────────────────────────────┼───────────────────────────────┐
+          │                               │                               │
+          ▼                               ▼                               ▼
 ┌─────────────────┐            ┌─────────────────┐            ┌─────────────────┐
-│  prefs (SUB)   │            │  pip (SUBMODULE)│            │ hatch (SUBMODULE)
+│  prefs (SUB)   │            │ grove (SUBMODULE)│            │ hatch (SUBMODULE)
 │                 │            │                 │            │                 │
 │ - prefs.yaml    │            │  github.com/    │            │  github.com/    │
 │ - CLAUDE.md     │            │  derrybirkett/  │            │  derrybirkett/  │
-│                 │            │  pip            │            │  hatch          │
-│ (your prefs)    │            │                 │            │                 │
-└─────────────────┘            │  - mission.md    │            │  - apps/        │
-                               │  - agents/      │            │  - libs/        │
-                               │  - graph/       │            │  - docker/      │
-                               │  - patterns/    │            │  - ci/          │
-                               └────────┬────────┘            └────────┬────────┘
+│                 │            │  grove          │            │  hatch          │
+│ (your prefs)   │            │                 │            │                 │
+└─────────────────┘            │  - mission/     │            │  - apps/        │
+                               │  - agent-       │            │  - libs/        │
+                               │    manifest.md  │            │  - docker/      │
+                               │  - workflows/   │            │  - ci/          │
+                               │  - docs/        │            └────────┬────────┘
+                               └────────┬────────┘                      │
                                         │                               │
                                         └───────────────┬───────────────┘
                                                         │
@@ -216,28 +218,27 @@ hatch/                 # Submodule from github.com/derrybirkett/hatch
                                               │   Generated     │
                                               │    Project      │
                                               │                 │
-                                              │  .prefs/        │
-                                              │  .pip/          │
-                                              │  hatch/         │
-                                              │  apps/          │
+                                              │  prefs/        │
+                                              │  grove/        │
+                                              │  apps/         │
                                               └─────────────────┘
 ```
 
 **Submodule Management**:
 ```bash
 # Add all submodules (seed init does this)
-git submodule add https://github.com/derrybirkett/prefs .prefs
-git submodule add https://github.com/derrybirkett/pip .pip
+git submodule add https://github.com/derrybirkett/prefs prefs
+git submodule add https://github.com/derrybirkett/grove grove
 git submodule add https://github.com/derrybirkett/hatch hatch
 
 # Use your own prefs
-git submodule add https://github.com/you/your-prefs .prefs
+git submodule add https://github.com/you/your-prefs prefs
 
 # Update to latest
 git submodule update --remote
 
 # After update, commit the new versions
-git add .prefs .pip hatch
+git add prefs grove hatch
 git commit -m "chore: update submodules"
 ```
 
@@ -252,25 +253,25 @@ git commit -m "chore: update submodules"
    "As an AI fan, I want a site that researches and publishes AI news..."
 
 2. seed adds submodules
-   → Adds .prefs/ (from prefs repo)
-   → Adds .pip/ (from pip repo)
+   → Adds prefs/ (from prefs repo)
+   → Adds grove/ (from grove repo)
    → Adds hatch/ (from hatch repo)
 
 3. seed reads intent
    → Parses with LLM
    → Extracts: users, problems, solutions, suggested metrics
 
-4. seed reads .prefs/prefs.yaml
+4. seed reads prefs/prefs.yaml
    → Loads preferences: NX, Playwright, shadcn, build order...
 
-5. seed generates .pip
-   → Creates .pip/mission/mission.md
-   → Creates .pip/ia/agents/*
-   → Creates .pip/graph/*
+5. seed generates grove/
+   → Creates grove/mission/mission.md
+   → Creates grove/agent-manifest.md
+   → Creates grove/workflows/*
    → Maps features to metrics
 
 6. seed calls hatch
-   → Passes .prefs/prefs.yaml preferences
+   → Passes prefs/prefs.yaml preferences
    → hatch scaffolds apps/cli, apps/api, apps/ui
    → hatch applies design preferences (minimalism, colors...)
    → hatch uses user preferences where specified, falls back to own opinions
@@ -282,25 +283,25 @@ git commit -m "chore: update submodules"
 ### Development Phase (Autonomous)
 
 ```
-1. Agent reads .pip/ at session start
+1. Agent reads grove/ at session start
    → Gets mission context
-   → Understands agent responsibilities (C-suite model)
+   → Understands agent responsibilities (Product/UX/Dev model)
    → Sees roadmap and priorities
 
-2. Agent picks up work from .pip/graph/roadmap
+2. Agent picks up work from grove/mission/
 
 3. Agent implements features
-   → Follows patterns from .pip/patterns/
-   → CTO agent reviews code quality
-   → COO agent ensures release hygiene
+   → Follows patterns from grove/patterns/
+   → Dev agent reviews code quality
+   → Product agent ensures feature alignment
 
 4. Agent uses "wrap up" command
    → Commits, tags, pushes
-   → Activity logged to .pip/docs/activity-log.md
+   → Activity logged to grove/docs/activity-log.md
 
 5. CI runs tests (Playwright E2E)
 
-6. pip tracks progress toward mission metrics
+6. grove tracks progress toward mission metrics
 ```
 
 ### Full Lifecycle
@@ -312,20 +313,20 @@ seed init --story "..."
   ↓
 ┌──────────────────────────────────────┐
 │  Bootstrap                            │
-│  • .prefs/ (your preferences)         │
-│  • .pip/ (mission + agents)          │
-│  • hatch/ (scaffolded code)          │
+│  • prefs/ (your preferences)         │
+│  • grove/ (mission + agents)         │
+│  • hatch/ (scaffolded code)         │
 └──────────────────────────────────────┘
   ↓
-Autonomous Development (pip)
-  • Agents work on roadmap items
-  • C-suite model assigns responsibilities
+Autonomous Development (grove)
+  • Agents work on mission items
+  • Product/UX/Dev model assigns responsibilities
   • Activity logged
   ↓
 Growth
   • Metrics tracked
-  • Roadmap updated
-  • New features from mission
+  • Mission updated
+  • New features from vision
 ```
 
 ---
@@ -335,8 +336,8 @@ Growth
 | What | Belongs To | Why |
 |------|-----------|-----|
 | Intent | User | It's their idea |
-| Preferences | .prefs/ (submodule) | Personal/team config - overrides hatch |
-| Mission/Strategy | .pip/ (submodule) | Project governance |
+| Preferences | prefs/ (submodule) | Personal/team config - overrides hatch |
+| Mission/Strategy | grove/ (submodule) | Project governance |
 | Code Templates | hatch/ (submodule) | Executable scaffolding - provides defaults |
 | Generated Code | Project repo | Per-project output |
 
@@ -344,8 +345,8 @@ Growth
 
 **Hatch is opinionated but prefs wins**:
 
-| Setting | .prefs/ | Hatch | Result |
-|---------|---------|-------|--------|
+| Setting | prefs/ | Hatch | Result |
+|---------|--------|-------|--------|
 | UI library | shadcn | shadcn | shadcn (agrees) |
 | UI library | vue | shadcn | **User wins** |
 | TypeScript | not specified | required | Hatch's opinion |
@@ -355,7 +356,7 @@ Growth
 ### What Each Tool Doesn't Do
 
 - **prefs**: Doesn't generate code or governance. Just preferences.
-- **pip**: Doesn't execute or scaffold. Pure information.
+- **grove**: Doesn't execute or scaffold. Pure information.
 - **seed**: Doesn't store preferences or templates. Just interprets.
 - **hatch**: Provides defaults but respects user preferences when specified.
 
@@ -369,17 +370,19 @@ Growth
 seed init "As an AI fan, I want..."
 # Or with options
 seed init --prefs derrybirkett/prefs --story "..."
+seed init --no-llm --story "..."
+seed init --no-grove    # Skip grove generation
+seed init --no-hatch    # Skip hatch scaffolding
 ```
 
 **What it does**:
-1. Adds .prefs/, .pip/, hatch/ as submodules
+1. Adds prefs/, grove/, hatch/ as submodules
 2. Parses intent (LLM)
-3. Generates .pip/ (governance)
-4. Calls hatch (code) with .prefs/ preferences
+3. Generates grove/ (governance)
+4. Calls hatch (code) with prefs/ preferences
 5. Creates project with:
-   - `.prefs/` (preferences)
-   - `.pip/` (governance)
-   - `hatch/` (templates)
+   - `prefs/` (preferences)
+   - `grove/` (governance)
    - `apps/` (CLI, API, UI)
    - Docker, CI/CD configured
 
@@ -390,7 +393,7 @@ seed check
 ```
 
 **What it does**:
-- Compares code to .pip/ mission
+- Compares code to grove/ mission
 - Flags drift
 - Suggests realignment
 
@@ -400,7 +403,7 @@ seed check
 wrap up
 ```
 
-**What it does** (from .prefs/prefs.yaml):
+**What it does** (from prefs/prefs.yaml):
 1. `git add -A`
 2. `git commit` (conventional commits)
 3. `git tag` (semver patch++)
@@ -416,7 +419,7 @@ wrap up
 | Reason | Explanation |
 |--------|-------------|
 | **Separation of concerns** | Intent ≠ preferences ≠ governance ≠ code |
-| **Reusability** | pip templates work with different preferences |
+| **Reusability** | grove templates work with different preferences |
 | **Flexibility** | Change hatch templates without affecting governance |
 | **Clarity** | Clear what each piece does |
 
@@ -433,58 +436,45 @@ wrap up
 ## File Structure
 
 ```
-~/.foundation/              # Global seed config (optional)
-└── prefs-repo: default     # Default prefs repo URL
+~/.bloom/                 # Global seed config (optional)
+└── prefs-repo: default   # Default prefs repo URL
 
 project/
-├── .gitmodules            # Submodule definitions
+├── .gitmodules          # Submodule definitions
 │
-├── .prefs/               # Preferences (SUBMODULE → github.com/you/prefs)
-│   ├── prefs.yaml        # Your preferences
-│   ├── CLAUDE.md         # AI agent instructions
-│   ├── hooks/            # Git hooks (pre-push, etc.)
+├── prefs/              # Preferences (SUBMODULE → github.com/you/prefs)
+│   ├── prefs.yaml      # Your preferences
+│   ├── CLAUDE.md       # AI agent instructions
+│   ├── hooks/          # Git hooks (pre-push, etc.)
 │   └── product-surfaces/ # Surface patterns
 │
-├── .pip/                 # Governance (SUBMODULE → github.com/derrybirkett/pip)
+├── grove/              # Governance (SUBMODULE → github.com/derrybirkett/grove)
 │   ├── mission/
-│   ├── ia/
-│   ├── graph/
-│   └── patterns/
+│   ├── agent-manifest.md
+│   ├── workflows/
+│   ├── patterns/
+│   └── docs/
 │
-├── hatch/                # Code templates (SUBMODULE → github.com/derrybirkett/hatch)
+├── hatch/              # Code templates (SUBMODULE → github.com/derrybirkett/hatch)
 │   ├── templates/
 │   ├── docker/
 │   └── ci/
 │
-├── apps/                 # Generated code (by hatch)
+├── apps/               # Generated code (by hatch)
 │   ├── cli/
 │   ├── api/
 │   └── ui/
 │
-└── libs/                 # Shared code
+└── libs/               # Shared code
 ```
 
 ### Submodule Lifecycle
 
-1. **seed init** → adds .prefs/ + .pip/ + hatch/ as submodules
-2. **Development** → work in apps/, .pip/, .prefs/ normally
-3. **Update prefs** → edit .prefs/ and push, then `git submodule update --remote .prefs`
-4. **Update pip/hatch** → `git submodule update --remote`
+1. **seed init** → adds prefs/ + grove/ + hatch/ as submodules
+2. **Development** → work in apps/, grove/, prefs/ normally
+3. **Update prefs** → edit prefs/ and push, then `git submodule update --remote prefs`
+4. **Update grove/hatch** → `git submodule update --remote`
 5. **Commit** → commit submodule updates to lock versions
-
----
-
-## Roadmap
-
-- [x] prefs as submodule structure (this update)
-- [x] seed supports multiple LLM providers (OpenRouter, Anthropic, OpenAI)
-- [ ] seed adds submodules during init (.prefs/, .pip/, hatch/)
-- [ ] seed reads .prefs/prefs.yaml when generating
-- [ ] hatch reads .prefs/prefs.yaml when scaffolding
-- [ ] pip.graph derived from seed intent
-- [ ] Activity log links features → metrics
-- [ ] seed check validates alignment
-- [ ] seed update restores alignment
 
 ---
 
@@ -493,8 +483,8 @@ project/
 | Term | Definition |
 |------|------------|
 | **Intent** | What the user wants to build (user story format) |
-| **Preferences** | How the builder likes to work (tools, patterns, aesthetics) - in .prefs/ |
-| **Governance** | How the team aligns (mission, agents, decisions) - in .pip/ |
+| **Preferences** | How the builder likes to work (tools, patterns, aesthetics) - in prefs/ |
+| **Governance** | How the team aligns (mission, agents, decisions) - in grove/ |
 | **Scaffolding** | Initial code structure from templates - via hatch/ |
-| **Foundation** | The integrated system (seed + prefs + pip + hatch) |
+| **Bloom** | The integrated system (seed + prefs + grove + hatch) |
 | **Submodule** | Git submodule - external repo embedded in project |

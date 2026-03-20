@@ -11,25 +11,31 @@ This project contains user preferences for digital product development. Use thes
 
 ## Current Session Context (2026-03-20)
 
-### Foundation System (Dialog)
+### Bloom System v2
 
-The user is building a system called "Foundation" / "Dialog" consisting of:
+The user is building a system called "Bloom" consisting of:
 
-- **seed** - CLI that bootstraps projects from intent → calls prefs + pip + hatch
+- **seed** - CLI that bootstraps projects from intent → calls prefs + grove + hatch
 - **prefs** - User preferences as a git submodule (this repo)
-- **pip** - Governance layer (mission, agents, patterns)
+- **grove** - Lightweight agentic layer (mission, Product/UX/Dev agents, patterns)
 - **hatch** - Code templates (apps, libs, docker)
 
-**Key updates today:**
-- seed now has `--no-llm` mode for parsing without API key
-- seed adds prefs submodule or creates prefs.yaml
-- seed generates CLAUDE.md and hooks automatically
-- hatch integration fixed to scaffold into correct directory
+**Key decisions:**
+- grove replaces pip (simpler: Product/UX/Dev vs C-suite)
+- Nature metaphors: seed, hatch, grove, bloom
+- Swappable components: can use supastarter/makerkit instead of hatch
+- prefs overrides grove and hatch defaults
+
+**CLI flags:**
+- `--story`, `--vision`, `--metric` for intent
+- `--no-llm` to skip LLM parsing
+- `--prefs <url>` to specify custom prefs repo
+- `--no-grove`, `--no-hatch`, `--no-prefs` to skip components
 
 ### Working Repos
 
-- `~/Projects/labs/dialog/` - Dialog system (seed, pip, hatch, prefs as subfolders)
-- `~/Projects/labs/testseed/ainews/` - Test project for Dialog
+- `~/Projects/labs/bloom/` - Bloom system (seed, grove, hatch, prefs as subfolders)
+- `~/Projects/labs/testseed/` - Test project
 
 ### Commands
 
@@ -37,11 +43,13 @@ The user is building a system called "Foundation" / "Dialog" consisting of:
 # Bootstrap project (without LLM)
 seed init --no-llm --story "..." --vision "..." --metric "..."
 
-# Skip prefs
+# Skip components
 seed init --no-prefs ...
-
-# Skip hatch
+seed init --no-grove ...
 seed init --no-hatch ...
+
+# Custom prefs repo
+seed init --prefs user/prefs ...
 ```
 
 ## Standard Tech Stack
