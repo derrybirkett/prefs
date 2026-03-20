@@ -27,6 +27,24 @@ developmentModel:
     - Code must match spec, not the other way around
     - Spec is living - maintained throughout development
 
+# Task alignment
+taskModel:
+  approach: explicit-traceability
+  description: All tasks must be explicit and traceable to strategic goals
+  hierarchy:
+    - vision: why we exist
+    - mission: what we do
+    - northStar: single metric that captures value delivered
+    - roadmap: ordered priorities toward north star
+    - tasks: discrete units of work
+  principles:
+    - Every task links to a roadmap item
+    - Every roadmap item links to north star
+    - Every north star links to mission
+    - Every mission links to vision
+    - Tasks should not exist without this traceability
+    - No "orphan" tasks - everything has purpose
+
 # Design principles
 design:
   ethos: minimalism
