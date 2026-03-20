@@ -66,54 +66,72 @@ productSurfaces:
 
 ### 2. pip (Submodule)
 
-**What**: Governance layer for a specific project.
+**What**: Agentic development runtime - autonomous agents build the product.
 
-**Why**: Teams need alignment. Mission, decision rights, patterns.
+**Why**: Agents need mission, roles, and patterns to work autonomously. pip is not just governance docs - it's the **runtime** where agents execute work.
 
-**Important**: pip is a separate, mature repo used as a **git submodule**. This allows:
+**Role in the flow**:
+```
+Idea → Seed (bootstrap) → Hatch (scaffold) → pip (autonomous development)
+```
+
+**Key features**:
+- **Mission** - guides agents on what matters
+- **C-suite model** - assigns responsibilities to agents (CTO for code, COO for release hygiene, etc.)
+- **Roadmap** - agents pick up work autonomously
+- **Patterns** - how agents collaborate (ReAct, Planning, Reflection)
+- **Activity log** - track what agents did and why
+
+**Important**: pip is a separate repo used as a **git submodule**. This allows:
 - Independent versioning and development
 - Easy updates via `git submodule update`
-- Clear ownership of governance patterns
+- Agents get mission context at session start
 
 **Contents**:
 ```
 pip/                    # Submodule from github.com/derrybirkett/pip
 ├── mission/           # Why we exist
 │   └── mission.md    # Problem, solution, vision
-├── ia/               # Governance structure
+├── ia/               # Agent responsibilities
 │   ├── agent_manifest.yml
-│   └── agents/       # CEO, CTO, CPO, etc.
-├── graph/            # Information architecture
-│   ├── product-app.md
-│   └── marketing.md
-├── patterns/         # Agentic patterns
-└── docs/             # Living documentation
+│   └── agents/       # CEO, CTO, CPO, COO, etc.
+├── graph/            # Roadmap and work items
+│   └── product-app.md
+├── patterns/         # Agentic collaboration patterns
+└── docs/             # Activity log, processes
 ```
 
-**Reads**: seed (when generating)
-**Writes**: seed (per-project, from intent)
+**Reads**: seed (when generating), agents (at session start)
+**Writes**: Agents (during autonomous development)
 
 ---
 
 ### 3. seed (Intent Bridge)
 
-**What**: LLM-powered interpreter that reads intent + preferences → generates governance + scaffolds code.
+**What**: Bootstrapper that converts human intent into a running project.
 
-**Why**: Translation layer between human intent and machine execution.
+**Why**: Translation layer between human idea and machine-ready project.
 
 **Flow**:
 ```
 User: "I want an AI news site with subscriptions"
          ↓
-    seed parses intent
-    (extracts users, problems, solutions, metrics)
+    seed init --story "..."
          ↓
     ├──→ pip (generates mission, agents, graph)
-    └──→ hatch (applies seed.config preferences)
+    └──→ hatch (applies .prefs/ preferences)
+         ↓
+    Project ready for autonomous development
 ```
 
-**Reads**: seed.config, pip (as templates)
-**Writes**: pip (per-project), hatch config
+**Commands**:
+```bash
+seed init --story "..." --vision "..." --metric "..."
+seed init --no-llm --story "..."   # Without LLM parsing
+```
+
+**Reads**: .prefs/ (preferences)
+**Writes**: .pip/ (governance), apps/ (code)
 
 ---
 
@@ -261,15 +279,53 @@ git commit -m "chore: update submodules"
 7. Result: Project ready to develop
 ```
 
-### Development Phase
+### Development Phase (Autonomous)
 
 ```
-1. Agent reads .pip/ for governance
-2. Agent reads .prefs/ for preferences
+1. Agent reads .pip/ at session start
+   → Gets mission context
+   → Understands agent responsibilities (C-suite model)
+   → Sees roadmap and priorities
+
+2. Agent picks up work from .pip/graph/roadmap
+
 3. Agent implements features
-4. Agent uses "wrap up" command → commits, tags, pushes
+   → Follows patterns from .pip/patterns/
+   → CTO agent reviews code quality
+   → COO agent ensures release hygiene
+
+4. Agent uses "wrap up" command
+   → Commits, tags, pushes
+   → Activity logged to .pip/docs/activity-log.md
+
 5. CI runs tests (Playwright E2E)
-6. Activity logged to .pip/docs/activity-log.md
+
+6. pip tracks progress toward mission metrics
+```
+
+### Full Lifecycle
+
+```
+Idea
+  ↓
+seed init --story "..."
+  ↓
+┌──────────────────────────────────────┐
+│  Bootstrap                            │
+│  • .prefs/ (your preferences)         │
+│  • .pip/ (mission + agents)          │
+│  • hatch/ (scaffolded code)          │
+└──────────────────────────────────────┘
+  ↓
+Autonomous Development (pip)
+  • Agents work on roadmap items
+  • C-suite model assigns responsibilities
+  • Activity logged
+  ↓
+Growth
+  • Metrics tracked
+  • Roadmap updated
+  • New features from mission
 ```
 
 ---
