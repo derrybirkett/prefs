@@ -9,6 +9,41 @@ This project contains user preferences for digital product development. Use thes
 3. **Design Thinking**: User-centered approach to problem solving
 4. **End-to-End Testing**: Always validate the complete user flow
 
+## Current Session Context (2026-03-20)
+
+### Foundation System (Dialog)
+
+The user is building a system called "Foundation" / "Dialog" consisting of:
+
+- **seed** - CLI that bootstraps projects from intent → calls prefs + pip + hatch
+- **prefs** - User preferences as a git submodule (this repo)
+- **pip** - Governance layer (mission, agents, patterns)
+- **hatch** - Code templates (apps, libs, docker)
+
+**Key updates today:**
+- seed now has `--no-llm` mode for parsing without API key
+- seed adds prefs submodule or creates prefs.yaml
+- seed generates CLAUDE.md and hooks automatically
+- hatch integration fixed to scaffold into correct directory
+
+### Working Repos
+
+- `~/Projects/labs/dialog/` - Dialog system (seed, pip, hatch, prefs as subfolders)
+- `~/Projects/labs/testseed/ainews/` - Test project for Dialog
+
+### Commands
+
+```bash
+# Bootstrap project (without LLM)
+seed init --no-llm --story "..." --vision "..." --metric "..."
+
+# Skip prefs
+seed init --no-prefs ...
+
+# Skip hatch
+seed init --no-hatch ...
+```
+
 ## Standard Tech Stack
 
 - **Monorepo**: NX workspace architecture
