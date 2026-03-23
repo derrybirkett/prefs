@@ -76,9 +76,6 @@ commands:
       - git tag (increment patch)
       - git push origin main --tags
     endsSession: true
-  unwraprap:
-    description: Typo alias for wrap up
-    aliasOf: wrap up
 
 # Technology stack defaults
 techStack:
