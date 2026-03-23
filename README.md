@@ -13,6 +13,7 @@ Copy the following files to your new project:
 - `prefs.yaml` - Configuration and preferences
 - `automation.md` - Automation hooks
 - `hooks/pre-push` - Git pre-push hook
+- `testing.md` - E2E testing guide
 
 ## What It Contains
 

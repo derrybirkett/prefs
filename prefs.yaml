@@ -153,6 +153,7 @@ coreUserFlow:
     - dashboard
     - logout
   validation: end-to-end-test
+  testFile: e2e/tests/core-flow.spec.ts
   priority: critical
 
 # Git workflow configuration

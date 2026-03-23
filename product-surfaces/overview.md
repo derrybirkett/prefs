@@ -119,6 +119,8 @@ Dashboard
 
 **Testing Priority**: This flow must be tested end-to-end on every change.
 
+See [testing.md](../testing.md) for E2E test setup and run instructions.
+
 All additional features are built on top of this working foundation.
 
 ## Surface Dependencies
