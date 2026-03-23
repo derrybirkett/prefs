@@ -9,49 +9,6 @@ This project contains user preferences for digital product development. Use thes
 3. **Design Thinking**: User-centered approach to problem solving
 4. **End-to-End Testing**: Always validate the complete user flow
 
-## Current Session Context (2026-03-20)
-
-### Bloom System v2
-
-The user is building a system called "Bloom" consisting of:
-
-- **seed** - CLI that bootstraps projects from intent → calls prefs + grove + hatch
-- **prefs** - User preferences as a git submodule (this repo)
-- **grove** - Lightweight agentic layer (mission, Product/UX/Dev agents, patterns)
-- **hatch** - Code templates (apps, libs, docker)
-
-**Key decisions:**
-- grove replaces pip (simpler: Product/UX/Dev vs C-suite)
-- Nature metaphors: seed, hatch, grove, bloom
-- Swappable components: can use supastarter/makerkit instead of hatch
-- prefs overrides grove and hatch defaults
-
-**CLI flags:**
-- `--story`, `--vision`, `--metric` for intent
-- `--no-llm` to skip LLM parsing
-- `--prefs <url>` to specify custom prefs repo
-- `--no-grove`, `--no-hatch`, `--no-prefs` to skip components
-
-### Working Repos
-
-- `~/Projects/labs/bloom/` - Bloom system (seed, grove, hatch, prefs as subfolders)
-- `~/Projects/labs/testseed/` - Test project
-
-### Commands
-
-```bash
-# Bootstrap project (without LLM)
-seed init --no-llm --story "..." --vision "..." --metric "..."
-
-# Skip components
-seed init --no-prefs ...
-seed init --no-grove ...
-seed init --no-hatch ...
-
-# Custom prefs repo
-seed init --prefs user/prefs ...
-```
-
 ## Standard Tech Stack
 
 - **Monorepo**: NX workspace architecture

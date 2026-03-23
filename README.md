@@ -1,47 +1,34 @@
-# Preferences
+# User Preferences
 
 **Philosophy and preferences for product development.**
 
-Part of the **Bloom** system.
+## What is This?
 
-## What is Prefs?
+This repo contains my personal philosophy and preferences for building products. Copy these files into a new project so your IDE knows how I like to work.
 
-Prefs contains your personal philosophy and preferences for building products:
+## Usage
+
+Copy the following files to your new project:
+- `CLAUDE.md` - AI agent instructions
+- `prefs.yaml` - Configuration and preferences
+- `automation.md` - Automation hooks
+- `hooks/pre-push` - Git pre-push hook
+
+## What It Contains
 
 - **Design values** - Minimalism, colors, typography
 - **Tech stack preferences** - NX, Playwright, shadcn
-- **Product surfaces** - Marketing, auth, dashboard
+- **Product surfaces** - Marketing, auth, dashboard, blog, docs
 - **Commands** - Custom workflow commands
 - **Build order** - CLI → API → UI
+- **Git workflow** - Feature branches, conventional commits
 
-## How It Works
-
-Prefs is embedded in projects via `seed init` and guides:
-
-- **grove** - Inherits design values and philosophy
-- **hatch** - Overrides stack defaults where specified
-
-## Structure
+## Files
 
 ```
-prefs/
 ├── prefs.yaml         # Main configuration
 ├── CLAUDE.md          # AI agent instructions
-├── ARCHITECTURE.md    # System architecture
-├── automation.md       # Git hooks and automation
-├── hooks/             # Git hooks (pre-push, etc.)
-└── product-surfaces/  # Surface patterns
+├── automation.md     # Git hooks and automation
+├── hooks/            # Git hooks
+└── product-surfaces/ # Surface patterns
 ```
-
-## Bloom System
-
-Prefs works with other Bloom pieces:
-
-| Component | Role |
-|-----------|------|
-| **seed** | Bootstrap - seeds intent |
-| **prefs** | Philosophy - your values |
-| **hatch** | Stack - scaffolds code |
-| **grove** | Agents - autonomous development |
-
-See [Bloom README](../README.md) for full context.
