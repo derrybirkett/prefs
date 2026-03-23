@@ -4,6 +4,38 @@
 
 Authentication is the gateway between public and private surfaces. It must be secure, user-friendly, and reliable.
 
+**Note**: This project uses a 3rd-party auth provider. The specific provider (WorkOS, Clerk, Auth0, etc.) is configured in environment variables. The flow below defines the interface contract.
+
+## Provider Interface
+
+The auth provider must implement:
+
+### Required Capabilities
+- Email/password authentication
+- Session management
+- User profile data
+- Logout
+
+### Environment Configuration
+```
+AUTH_PROVIDER=workos  # or clerk, auth0, etc.
+AUTH_API_KEY=...
+AUTH_CLIENT_ID=...
+AUTH_WEBHOOK_SECRET=...
+```
+
+### User Profile Schema
+```typescript
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
+  createdAt: Date;
+}
+```
+
 ## Components
 
 ### Sign Up Flow
@@ -17,21 +49,19 @@ Authentication is the gateway between public and private surfaces. It must be se
 - Name (optional or required based on product needs)
 - Terms acceptance checkbox
 
-**Validation**:
-- Email format validation
-- Password requirements (min length, complexity)
-- Password match confirmation
-- Email uniqueness check
+**Provider Integration**:
+- Submit to provider's signup API
+- Handle provider-specific responses
+- Sync user data to local DB if needed
 
 **Flow**:
 1. User fills form
 2. Client-side validation
-3. Submit to API
-4. Server-side validation
-5. Create user account
-6. Send verification email (if needed)
-7. Auto-login or redirect to login
-8. Redirect to dashboard
+3. Submit to auth provider
+4. Provider creates account
+5. Receive user profile
+6. Create local session
+7. Redirect to dashboard
 
 ### Login Flow
 
@@ -43,40 +73,45 @@ Authentication is the gateway between public and private surfaces. It must be se
 - "Remember me" checkbox (optional)
 - "Forgot password?" link
 
+**Provider Integration**:
+- Submit credentials to provider
+- Provider validates
+- Receive session/token
+
 **Flow**:
 1. User enters credentials
-2. Submit to API
-3. Validate credentials
-4. Create session/token
+2. Submit to auth provider
+3. Provider validates
+4. Create local session
 5. Redirect to dashboard (or intended destination)
 
 **Error Handling**:
 - Generic error for invalid credentials (security)
 - Clear messaging for locked accounts
-- Rate limiting for brute force protection
+- Rate limiting handled by provider
 
 ### Password Reset Flow
 
 **Pages**: `/forgot-password`, `/reset-password`
 
+**Note**: If provider handles password reset, link to provider's reset flow. Otherwise:
+
 **Forgot Password Page**:
 - Email input
-- Submit sends reset link to email
+- Submit triggers provider reset
 
 **Reset Password Page**:
 - Accessed via email link with token
 - New password input
-- Confirm password input
-- Submit updates password
+- Submit updates via provider
 
 **Flow**:
 1. User requests reset
-2. System generates secure token
-3. Send email with reset link
-4. User clicks link
+2. Provider sends reset email
+3. User clicks link
+4. Provider validates token
 5. User enters new password
-6. System validates token and updates password
-7. Redirect to login
+6. Provider updates password
 
 ### Logout
 
@@ -84,29 +119,24 @@ Authentication is the gateway between public and private surfaces. It must be se
 
 **Flow**:
 1. User clicks logout
-2. Clear session/token
-3. Redirect to landing page
+2. Invalidate local session
+3. Redirect to provider logout (if needed)
+4. Redirect to landing page
 
 **No confirmation needed**: Logout should be quick and easy.
 
 ## Security Requirements
 
-### Password Requirements
-- Minimum 8 characters
-- Mix of uppercase, lowercase, numbers
-- Special characters recommended
-- Check against common password lists
-
 ### Session Management
 - Secure session tokens
 - HttpOnly cookies
 - CSRF protection
-- Session timeout after inactivity
+- Session timeout (configurable)
 
-### Rate Limiting
-- Limit login attempts per IP
-- Limit password reset requests
-- Lock account after repeated failures
+### Provider Security
+- Verify provider webhook signatures
+- Sanitize user data from provider
+- Handle provider errors gracefully
 
 ## User Experience
 
@@ -117,7 +147,7 @@ Authentication is the gateway between public and private surfaces. It must be se
 
 ### Error Messages
 - Client-side validation before submit
-- Server errors shown clearly
+- Provider errors shown clearly
 - Help users fix mistakes
 - Never expose sensitive information
 
@@ -155,6 +185,6 @@ Authentication is the gateway between public and private surfaces. It must be se
 - CTA buttons → link to signup/login
 
 ### With Email System
-- Send verification email on signup
-- Send password reset email
-- Send welcome email after verification
+- Provider sends verification email
+- Provider sends password reset email
+- Sync welcome email after verification
